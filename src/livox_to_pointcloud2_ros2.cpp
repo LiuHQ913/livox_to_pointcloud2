@@ -18,16 +18,19 @@ LivoxToPointCloud2::LivoxToPointCloud2(const rclcpp::NodeOptions& options) : rcl
 #ifdef LIVOX_ROS2_DRIVER
   // livox_ros2_driver
   livox_sub =
-    this->create_subscription<livox_interfaces::msg::CustomMsg>("/livox/lidar", rclcpp::SensorDataQoS(), [this](const livox_interfaces::msg::CustomMsg::ConstSharedPtr livox_msg) {
-      const auto points_msg = converter.convert(*livox_msg);
-      points_pub->publish(*points_msg);
+    this->create_subscription<livox_interfaces::msg::CustomMsg>(
+      "/livox/lidar", 
+      rclcpp::SensorDataQoS(), 
+      [this](const livox_interfaces::msg::CustomMsg::ConstSharedPtr livox_msg) {
+        const auto points_msg = converter.convert(*livox_msg);
+        points_pub->publish(*points_msg);
     });
 #endif
 
 #ifdef LIVOX_ROS_DRIVER2
   // livox_ros_driver2
   livox2_sub = this->create_subscription<livox_ros_driver2::msg::CustomMsg>(
-    "/livox2/lidar",
+    "/livox/lidar",
     rclcpp::SensorDataQoS(),
     [this](const livox_ros_driver2::msg::CustomMsg::ConstSharedPtr livox_msg) {
       const auto points_msg = converter.convert(*livox_msg);
